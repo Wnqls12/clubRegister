@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>2025 IASA CLUB REGISTER</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <style>
+            /* 결과 확인 테이블 스타일 */
+            .result-table {
+                width: 100%;
+                border-collapse: collapse;
+                background: white;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
+            .result-table th, .result-table td {
+                padding: 12px;
+                text-align: center;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .result-table th {
+                background: #3498db;
+                color: white;
+                font-weight: 700;
+            }
+
+            .result-status {
+                font-weight: 700;
+                padding: 5px 10px;
+                border-radius: 5px;
+                display: inline-block;
+                color: white;
+            }
+
+            .result-pass { background: #28a745; }
+            .result-fail { background: #dc3545; }
+            .result-pending { background: #ffc107; }
+        </style>
+    </head>
+    <body id="page-top">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="{% static 'img/logo.webp' %}" alt="..." />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars ms-1"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                        <li class="nav-item"><a class="nav-link" href="/">동아리</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/register">신청</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'check' %}">결과 확인</a></li>
+                        {% if user.is_authenticated and user.profile.is_leader %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin_home' %}">관리자 사이트로 이동</a>
+                        </li>
+                        {% endif %}
+                        <li class="nav-item" id="authMenu">
+                            {% if user.is_authenticated %}
+                                <a class="nav-link" href="{% url 'logout' %}">안녕하세요, {{ user.username }}님 (로그아웃)</a>
+                            {% else %}
+                                <a class="nav-link" href="{% url 'login' %}">로그인/회원가입</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Masthead -->
+        <header class="masthead">
+            <div class="container">
+                <div class="masthead-heading text-uppercase">동아리 결과 확인하는 곳</div>
+                <div class="masthead-subheading">두근두근</div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <section class="page-section">
+            <div class="container">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4">신청 결과</h4>
+                        <table class="result-table">
+                            <thead>
+                                <tr>
+                                    <th>동아리</th>
+                                    <th>1지망</th>
+                                    <th>합격 여부</th>
+                                    <th>2지망</th>
+                                    <th>합격 여부</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>제1 동아리</strong></td>
+                                    <td>{{ club1_1 }}</td>
+                                    <td>
+                                        <span class="result-status
+                                            {% if result1_1 == 'true' %}result-pass
+                                            {% elif result1_1 == 'false' %}result-fail
+                                            {% else %}result-pending{% endif %}">
+                                            {% if result1_1 == "true" %}
+                                                합격 🎉
+                                            {% elif result1_1 == "false" %}
+                                                불합격 ❌
+                                            {% else %}
+                                                대기중 🕐
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ club1_2 }}</td>
+                                    <td>
+                                        <span class="result-status
+                                            {% if result1_2 == 'true' %}result-pass
+                                            {% elif result1_2 == 'false' %}result-fail
+                                            {% else %}result-pending{% endif %}">
+                                            {% if result1_2 == "true" %}
+                                                합격 🎉
+                                            {% elif result1_2 == "false" %}
+                                                불합격 ❌
+                                            {% else %}
+                                                대기중 🕐
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>제2 동아리</strong></td>
+                                    <td>{{ club2_1 }}</td>
+                                    <td>
+                                        <span class="result-status
+                                            {% if result2_1 == 'true' %}result-pass
+                                            {% elif result2_1 == 'false' %}result-fail
+                                            {% else %}result-pending{% endif %}">
+                                            {% if result2_1 == "true" %}
+                                                합격 🎉
+                                            {% elif result2_1 == "false" %}
+                                                불합격 ❌
+                                            {% else %}
+                                                대기중 🕐
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ club2_2 }}</td>
+                                    <td>
+                                        <span class="result-status
+                                            {% if result2_2 == 'true' %}result-pass
+                                            {% elif result2_2 == 'false' %}result-fail
+                                            {% else %}result-pending{% endif %}">
+                                            {% if result2_2 == "true" %}
+                                                합격 🎉
+                                            {% elif result2_2 == "false" %}
+                                                불합격 ❌
+                                            {% else %}
+                                                대기중 🕐
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer py-4 bg-light">
+            <div class="container text-center">
+                <span>Copyright &copy; 2025 IASA CLUB REGISTER</span>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
